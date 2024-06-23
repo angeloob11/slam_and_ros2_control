@@ -46,16 +46,15 @@ def generate_launch_description():
             parameters=[{'use_sim_time' : True}])
 
     #Rviz 2 configuration
-    """
+
     rviz = Node(
         package='rviz2',
         executable='rviz2',
         arguments=[
             '-d',
-            os.path.join(get_package_share_directory(pkg_name), )
+            os.path.join(get_package_share_directory(pkg_name), 'config', 'rviz_config.rviz')
         ]
     )
-    """
 
     #Spawneo al robot
 
@@ -66,19 +65,7 @@ def generate_launch_description():
                                    '-y', '0.0',],
                         output = 'screen')
     
-    """
-    diff_drive_spawner = Node(
-        package="controller_manager",
-        executable="spawner",
-        arguments=["diff_cont"],
-    )
-
-    joint_broad_spawner = Node(
-        package="controller_manager",
-        executable="spawner",
-        arguments=["joint_broad"],
-    )
-    """
+  
     load_joint_state_controller = ExecuteProcess(
         cmd=['ros2', 'control', 'load_controller', '--set-state', 'active',
              'joint_broad'],
@@ -123,10 +110,9 @@ def generate_launch_description():
             )
         ),
         rsp,
-        joint_state_publisher_node, 
-        #diff_drive_spawner,
-        #joint_broad_spawner,      
+        joint_state_publisher_node,    
         spawn_entity,
+        rviz,
 
         DeclareLaunchArgument(
             'use_sim_time',
